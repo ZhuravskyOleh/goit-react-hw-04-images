@@ -9,7 +9,7 @@ export async function readData(query, page) {
   );
 
   // isMore -flag shower button of 'read-more'
-  const isMore = response.data.totalHits > PER_PAGE * page;
+  const isMoreApi = response.data.totalHits > PER_PAGE * page;
 
-  return { reqGallery: response.data.hits, isMore };
+  return { reqGallery: response.data.hits, isMoreApi };
 }

@@ -1,54 +1,45 @@
-import { Component } from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { Header } from './Searchbar.styled';
 import { FaSearch, FaRegWindowClose } from 'react-icons/fa';
 
-class Searchbar extends Component {
-  state = {
-    value: '',
-  };
+function Searchbar({ onSubmit, isDisabled }) {
+  const [value, setValue] = useState('');
 
-  onReset = () => this.setState({ value: '' });
-
-  handlerSubmit = e => {
+  const handlerSubmit = e => {
     e.preventDefault();
-    this.setState({ value: '' });
-    const searchValue = e.target.elements[1].value.trim();
-    if (searchValue) this.props.onSubmit(searchValue);
+    setValue('');
+    const word = e.target.elements[1].value.trim();
+    if (word) onSubmit(word);
   };
 
-  onChange = e => this.setState({ value: e.target.value });
+  return (
+    <Header>
+      <form onSubmit={handlerSubmit}>
+        <button type="submit" disabled={isDisabled}>
+          <FaSearch size={20} className="icon" />
+        </button>
 
-  render() {
-    const { value } = this.state;
-    return (
-      <Header>
-        <form onSubmit={this.handlerSubmit}>
-          <button type="submit" disabled={this.props.isDisabled}>
-            <FaSearch size={20} className="icon" />
-          </button>
+        <input
+          type="text"
+          autoComplete="off"
+          autoFocus
+          placeholder="Search images and photos"
+          onChange={e => setValue(e.target.value)}
+          value={value}
+        />
 
-          <input
-            type="text"
-            autoComplete="off"
-            autoFocus
-            placeholder="Search images and photos"
-            onChange={this.onChange}
-            value={value}
+        <button onClick={() => setValue('')} type="reset">
+          <FaRegWindowClose
+            className="icon"
+            size={20}
+            color={value ? 'red' : 'transparent'}
           />
-
-          <button onClick={this.onReset} type="reset">
-            <FaRegWindowClose
-              className="icon"
-              size={20}
-              color={value ? 'red' : 'transparent'}
-            />
-          </button>
-        </form>
-      </Header>
-    );
-  }
+        </button>
+      </form>
+    </Header>
+  );
 }
 
 Searchbar.propTypes = {
